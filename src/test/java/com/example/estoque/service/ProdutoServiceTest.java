@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import java.util.Arrays;
+import java.util.List;
+
 class ProdutoServiceTest {
 
     ProdutoService service;
@@ -61,6 +64,27 @@ class ProdutoServiceTest {
         Assertions.assertEquals(3, produtoSalvo.getQtd());
     }
 
+    @Test
+    void deveRetornarListaComTodosOsProdutosEmEstoque(){
+
+        //Cenário
+        ProdutoEntity produto1 = umProdutoEntity("Livro", 4);
+        ProdutoEntity produto2 = umProdutoEntity("Camiseta", 7);
+        ProdutoEntity produto3 = umProdutoEntity("Ferramenta", 8);
+        List<ProdutoEntity> produtos = Arrays.asList(produto1, produto2, produto3);
+
+        Mockito.when(repository.findAll()).thenReturn(produtos);
+
+        //Execução
+        List<Produto> produtosRetornados = service.encontrarTodos();
+
+        //Validação]
+        Mockito.verify(repository, Mockito.times(1)).findAll();
+        Assertions.assertEquals(3, produtosRetornados.size());
+        Assertions.assertEquals("Livro", produtosRetornados.get(0).getNome());
+        Assertions.assertEquals(8, produtosRetornados.get(2).getQtd());
+    }
+
     private Produto umProduto(){
         Produto produto = new Produto();
         produto.setNome("produtoTeste");
@@ -68,4 +92,10 @@ class ProdutoServiceTest {
         return produto;
     }
 
+    private ProdutoEntity umProdutoEntity(String nome, int qtd) {
+        ProdutoEntity produtoEntity = new ProdutoEntity();
+        produtoEntity.setNome(nome);
+        produtoEntity.setQtd(qtd);
+        return produtoEntity;
+    }
 }
