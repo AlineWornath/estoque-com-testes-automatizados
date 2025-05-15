@@ -21,7 +21,7 @@ class ProdutoServiceTest {
     }
 
     @Test
-    void deveCadastrarProdutoSeNãoExistirNoEstoque() {
+    void deveCadastrarProdutoSeNaoExistirNoEstoque() {
         //Cenário
         Produto produto = umProduto();
 
